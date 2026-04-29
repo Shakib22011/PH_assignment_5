@@ -40,7 +40,37 @@
     <!-- custom css -->
     <link rel="stylesheet" href="style.css" />
   </head>
+
   <body>
-    <script src="script.js"></script>
+    <div class="min-h-screen login flex justify-center items-center">
+      <fieldset
+        class="fieldset bg-base-200 shadow-2xl rounded-box w-xs md:w-lg  p-8"
+      >
+        <div class="icon mx-auto mb-4">
+          <img src="./assets/github-logo.png" alt="" />
+        </div>
+        <h3 class="text-center text-2xl font-semibold">GitHub Issue Tracker</h3>
+        <p class="text-center text-neutral/70">Sign in to manage your issues</p>
+        <label class="label">Username</label>
+        <input id="username" type="text" class="input w-full" placeholder="Enter Username" />
+        <span class="text-indigo-500 mb-4">Default: admin</span>
+
+        <label class="label">Password</label>
+        <input id="password" type="password" class="input w-full" value="admin123" placeholder="Enter Password" />
+        <span class="text-indigo-500 mb-4">Default: admin123</span>
+
+        <button onclick="signin()" class="btn btn-primary mt-4">Sign in</button>
+        <div class="divider">OR</div>
+        <div>
+          <p class="text-center text-neutral/50 mb-4">Demo Credentials:</p>
+          <div class="demo bg-gray-200 text-center p-8 rounded-lg">
+            <p><span class="font-bold">Username:</span> admin</p>
+            <p><span class="font-bold">Password:</span> admin123</p>
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <script src="login.js"></script>
   </body>
 </html>
