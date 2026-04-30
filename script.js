@@ -42,7 +42,7 @@ document.getElementById("allbutton").addEventListener("click", () => {
     .then((json) => {
       displayallissues(json.data);
       console.log(json.data);
-    //   document.getElementById("count").innerHTML = "50";
+      //   document.getElementById("count").innerHTML = "50";
       removeactive();
       document.getElementById("allbutton").classList.add("btn-primary");
       managespinner(false);
@@ -161,7 +161,7 @@ const displaymodal = (data) => {
 
 //display all issues on the dashboard
 const displayallissues = (issues) => {
-    let count=0;
+  let count = 0;
   const issuecontainer = document.getElementById("issue-container");
   issuecontainer.innerHTML = "";
   //   console.log(issues);
@@ -191,7 +191,7 @@ const displayallissues = (issues) => {
         `;
     issuecontainer.appendChild(card);
   });
-  document.getElementById("count").innerHTML =count;
+  document.getElementById("count").innerHTML = count;
   managespinner(false);
 };
 
@@ -275,7 +275,7 @@ document.getElementById("btn-search").addEventListener("click", () => {
   const input = document.getElementById("input-search");
   const value = input.value.trim().toLowerCase();
   // console.log(value);
-
+  managespinner(true);
   fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${value}`)
     .then((res) => res.json())
     .then((json) => {
@@ -285,8 +285,9 @@ document.getElementById("btn-search").addEventListener("click", () => {
       const filter = allwords.filter(
         (each) =>
           each.title.toLowerCase().includes(value) ||
-          each.description.toLowerCase().includes(value)
+          each.description.toLowerCase().includes(value),
       );
       displayallissues(filter);
+      managespinner(false);
     });
 });
