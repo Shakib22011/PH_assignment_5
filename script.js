@@ -1,3 +1,14 @@
+//spinner
+const managespinner = (status) => {
+  if (status == true) {
+    document.getElementById("spinner").classList.remove("hidden");
+    document.getElementById("issue-container").classList.add("hidden");
+  } else {
+    document.getElementById("issue-container").classList.remove("hidden");
+    document.getElementById("spinner").classList.add("hidden");
+  }
+};
+
 //active function
 const removeactive = () => {
   const lessonbuttons = document.querySelectorAll(".tab-button");
@@ -9,6 +20,7 @@ const removeactive = () => {
 
 //load all issues
 const loadallissues = () => {
+  managespinner(true);
   // console.log('hello');
   const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues";
   fetch(url)
@@ -16,28 +28,58 @@ const loadallissues = () => {
     .then((json) => {
       displayallissues(json.data);
       document.getElementById("allbutton").classList.add("btn-primary");
-
-      document.getElementById("allbutton").addEventListener("click", () => {
-        displayallissues(json.data);
-        document.getElementById("count").innerHTML = "50";
-        removeactive();
-        document.getElementById("allbutton").classList.add("btn-primary");
-      });
-      document.getElementById("openbutton").addEventListener("click", () => {
-        displayopenissues(json.data);
-        // document.getElementById('count').innerHTML='44';
-        removeactive();
-        document.getElementById("openbutton").classList.add("btn-primary");
-      });
-      document.getElementById("closebutton").addEventListener("click", () => {
-        displayclosedissues(json.data);
-        // document.getElementById('count').innerHTML='6';
-        removeactive();
-        document.getElementById("closebutton").classList.add("btn-primary");
-      });
     });
+    // managespinner(false);
 };
 loadallissues();
+
+//load all issues button
+document.getElementById("allbutton").addEventListener("click", () => {
+  managespinner(true);
+  const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues";
+  fetch(url)
+    .then((res) => res.json())
+    .then((json) => {
+      displayallissues(json.data);
+      console.log(json.data);
+      document.getElementById("count").innerHTML = "50";
+      removeactive();
+      document.getElementById("allbutton").classList.add("btn-primary");
+      managespinner(false);
+    });
+});
+
+//load open issue
+document.getElementById("openbutton").addEventListener("click", () => {
+  managespinner(true);
+  const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues";
+  fetch(url)
+    .then((res) => res.json())
+    .then((json) => {
+      displayopenissues(json.data);
+      console.log(json.data);
+    //   document.getElementById("count").innerHTML = "50";
+      removeactive();
+      document.getElementById("openbutton").classList.add("btn-primary");
+      managespinner(false);
+    });
+});
+
+//load close issue
+document.getElementById("closebutton").addEventListener("click", () => {
+  managespinner(true);
+  const url = "https://phi-lab-server.vercel.app/api/v1/lab/issues";
+  fetch(url)
+    .then((res) => res.json())
+    .then((json) => {
+      displayclosedissues(json.data);
+      console.log(json.data);
+    //   document.getElementById("count").innerHTML = "6";
+      removeactive();
+      document.getElementById("closebutton").classList.add("btn-primary");
+      managespinner(false);
+    });
+});
 
 //priority color
 const prioritycolor = (priority) => {
@@ -77,22 +119,24 @@ const loadlavels = (array) => {
 };
 
 //load modal details
-const loadmodal=(id)=>{
-    // console.log(id);
-    const url=`https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
-    fetch(url).then(res=>res.json()).then(json=>{
-        displaymodal(json.data);
-    })
-}
+const loadmodal = (id) => {
+  // console.log(id);
+  const url = `https://phi-lab-server.vercel.app/api/v1/lab/issue/${id}`;
+  fetch(url)
+    .then((res) => res.json())
+    .then((json) => {
+      displaymodal(json.data);
+    });
+};
 
 //modal data display
-const displaymodal=(data)=>{
-    const modalcontainer=document.getElementById('modal_container');
-    modalcontainer.innerHTML=`
+const displaymodal = (data) => {
+  const modalcontainer = document.getElementById("modal_container");
+  modalcontainer.innerHTML = `
     <h2 class="text-2xl font-bold">${data.title}</h2>
       <div class="flex gap-3">
-        <button class="btn btn-soft btn-success rounded-full px-6 max-h-[24px]">${data.status==='open'?'Opened':'Closed'}</button>
-        <p class="flex items-center gap-3 text-neutral/60"><img src="./assets/Ellipse 5.png" alt=""> Opened by ${data.author}  <img src="./assets/Ellipse 5.png" alt="">  ${data.createdAt.split('T')[0]}</p>
+        <button class="btn btn-soft btn-success rounded-full px-6 max-h-[24px]">${data.status === "open" ? "Opened" : "Closed"}</button>
+        <p class="flex items-center gap-3 text-neutral/60"><img src="./assets/Ellipse 5.png" alt=""> Opened by ${data.author}  <img src="./assets/Ellipse 5.png" alt="">  ${data.createdAt.split("T")[0]}</p>
       </div>
     <div class="flex gap-2 items-center flex-wrap">
               ${loadlavels(data.labels)}
@@ -112,21 +156,21 @@ const displaymodal=(data)=>{
       </div>
     </div>
     `;
-    document.getElementById('my_modal_5').showModal();
-}
+  document.getElementById("my_modal_5").showModal();
+};
 
 //display all issues on the dashboard
 const displayallissues = (issues) => {
   const issuecontainer = document.getElementById("issue-container");
   issuecontainer.innerHTML = "";
-//   console.log(issues);
+  //   console.log(issues);
   issues.forEach((issue) => {
     // console.log(issue.id);
     const card = document.createElement("div");
     card.innerHTML = `
         <div onclick="loadmodal(${issue.id})" class="card min-h-full shadow-lg bg-white p-5 rounded-md space-y-3 ${getstatusborder(issue.status)}">
           <div class="flex items-center justify-between">
-            <img src="./assets/${issue.status === "open" ? "Open-status.png" : "Closed- Status .png"}" alt="" />
+            <img src="./assets/${issue.status === "open" ? "Open-status.png" : "Closed-Status.png"}" alt="" />
             <button class="btn btn-soft ${prioritycolor(issue.priority)} rounded-full px-6 max-h-[24px]">${issue.priority}</button>
           </div>
           <div class="space-y-4">
@@ -140,14 +184,13 @@ const displayallissues = (issues) => {
           </div>
           <div class="divider text-neutral/50"></div>
           <p class="text-neutral/50">#${issue.id} by ${issue.author} </p>
-          <p class="text-neutral/50">${issue.createdAt.split('T')[0]}</p>
+          <p class="text-neutral/50">${issue.createdAt.split("T")[0]}</p>
         </div>
         `;
     issuecontainer.appendChild(card);
   });
+    managespinner(false);
 };
-
-
 
 //display open issues
 const displayopenissues = (issues) => {
@@ -163,7 +206,7 @@ const displayopenissues = (issues) => {
       card.innerHTML = `
         <div onclick="loadmodal(${issue.id})" class="card min-h-full shadow-lg bg-white p-5 rounded-md space-y-3 ${getstatusborder(issue.status)}">
           <div class="flex items-center justify-between">
-            <img src="./assets/${issue.status === "open" ? "Open-status.png" : "Closed- Status .png"}" alt="" />
+            <img src="./assets/${issue.status === "open" ? "Open-status.png" : "Closed-Status.png"}" alt="" />
             <button class="btn btn-soft ${prioritycolor(issue.priority)} rounded-full px-6 max-h-[24px]">${issue.priority}</button>
           </div>
           <div class="space-y-4">
@@ -177,7 +220,7 @@ const displayopenissues = (issues) => {
           </div>
           <div class="divider text-neutral/50"></div>
           <p class="text-neutral/50">#${issue.id} by ${issue.author} </p>
-          <p class="text-neutral/50">${issue.createdAt.split('T')[0]}</p>
+          <p class="text-neutral/50">${issue.createdAt.split("T")[0]}</p>
         </div>
         `;
       issuecontainer.appendChild(card);
@@ -200,7 +243,7 @@ const displayclosedissues = (issues) => {
       card.innerHTML = `
         <div onclick="loadmodal(${issue.id})" class="card min-h-full shadow-lg bg-white p-5 rounded-md space-y-3 ${getstatusborder(issue.status)}">
           <div class="flex items-center justify-between">
-            <img src="./assets/${issue.status === "open" ? "Open-status.png" : "Closed- Status .png"}" alt="" />
+            <img src="./assets/${issue.status === "open" ? "Open-status.png" : "Closed-Status.png"}" alt="" />
             <button class="btn btn-soft ${prioritycolor(issue.priority)} rounded-full px-6 max-h-[24px]">${issue.priority}</button>
           </div>
           <div class="space-y-4">
@@ -214,7 +257,7 @@ const displayclosedissues = (issues) => {
           </div>
           <div class="divider text-neutral/50"></div>
         <p class="text-neutral/50">#${issue.id} by ${issue.author} </p>
-          <p class="text-neutral/50">${issue.createdAt.split('T')[0]}</p>
+          <p class="text-neutral/50">${issue.createdAt.split("T")[0]}</p>
         </div>
         `;
       issuecontainer.appendChild(card);
