@@ -78,13 +78,27 @@
       </div>
     </header>
 
+    <!-- Open the modal using ID.showModal() method -->
+    <dialog id="my_modal_5" class="modal modal-bottom sm:modal-middle">
+      <div class="modal-box">
+        <div id="modal_container" class="bg-white space-y-4"></div>
+
+        <div class="modal-action">
+          <form method="dialog">
+            <!-- if there is a button in form, it will close the modal -->
+            <button class="btn">Close</button>
+          </form>
+        </div>
+      </div>
+    </dialog>
+
     <main class="max-w-10/12 mx-auto mt-15">
       <section
         class="hero_buttons flex gap-3 shadow-lg border border-gray-200 rounded-md py-2 px-4 mb-6"
       >
-        <button class="btn">All</button>
-        <button class="btn">Open</button>
-        <button class="btn">Closed</button>
+        <button id="allbutton" class="tab-button btn">All</button>
+        <button id="openbutton" class="tab-button btn">Open</button>
+        <button id="closebutton" class="tab-button btn">Closed</button>
       </section>
 
       <section
@@ -97,7 +111,9 @@
             alt=""
           />
           <div>
-            <h2 class="font-semibold text-lg">50 Issues</h2>
+            <h2 class="font-semibold text-lg">
+              <span id="count">50</span> Issues
+            </h2>
             <p class="text-neutral/60">Track and manage your project issues</p>
           </div>
         </div>
@@ -112,9 +128,7 @@
       <section
         id="issue-container"
         class="bg-gray-100 grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 p-5 rounded-lg gap-3"
-      >
-        
-      </section>
+      ></section>
     </main>
 
     <script src="script.js"></script>
