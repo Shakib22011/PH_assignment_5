@@ -29,7 +29,7 @@ const loadallissues = () => {
       displayallissues(json.data);
       document.getElementById("allbutton").classList.add("btn-primary");
     });
-    // managespinner(false);
+  // managespinner(false);
 };
 loadallissues();
 
@@ -42,7 +42,7 @@ document.getElementById("allbutton").addEventListener("click", () => {
     .then((json) => {
       displayallissues(json.data);
       console.log(json.data);
-      document.getElementById("count").innerHTML = "50";
+    //   document.getElementById("count").innerHTML = "50";
       removeactive();
       document.getElementById("allbutton").classList.add("btn-primary");
       managespinner(false);
@@ -58,7 +58,7 @@ document.getElementById("openbutton").addEventListener("click", () => {
     .then((json) => {
       displayopenissues(json.data);
       console.log(json.data);
-    //   document.getElementById("count").innerHTML = "50";
+      //   document.getElementById("count").innerHTML = "50";
       removeactive();
       document.getElementById("openbutton").classList.add("btn-primary");
       managespinner(false);
@@ -74,7 +74,7 @@ document.getElementById("closebutton").addEventListener("click", () => {
     .then((json) => {
       displayclosedissues(json.data);
       console.log(json.data);
-    //   document.getElementById("count").innerHTML = "6";
+      //   document.getElementById("count").innerHTML = "6";
       removeactive();
       document.getElementById("closebutton").classList.add("btn-primary");
       managespinner(false);
@@ -161,10 +161,12 @@ const displaymodal = (data) => {
 
 //display all issues on the dashboard
 const displayallissues = (issues) => {
+    let count=0;
   const issuecontainer = document.getElementById("issue-container");
   issuecontainer.innerHTML = "";
   //   console.log(issues);
   issues.forEach((issue) => {
+    count++;
     // console.log(issue.id);
     const card = document.createElement("div");
     card.innerHTML = `
@@ -189,7 +191,8 @@ const displayallissues = (issues) => {
         `;
     issuecontainer.appendChild(card);
   });
-    managespinner(false);
+  document.getElementById("count").innerHTML =count;
+  managespinner(false);
 };
 
 //display open issues
@@ -265,3 +268,25 @@ const displayclosedissues = (issues) => {
   });
   document.getElementById("count").innerHTML = count;
 };
+
+//search
+document.getElementById("btn-search").addEventListener("click", () => {
+  removeactive();
+  const input = document.getElementById("input-search");
+  const value = input.value.trim().toLowerCase();
+  // console.log(value);
+
+  fetch(`https://phi-lab-server.vercel.app/api/v1/lab/issues/search?q=${value}`)
+    .then((res) => res.json())
+    .then((json) => {
+      console.log(json);
+      const allwords = json.data;
+      // const filter=allwords.filter(each=>each.title.toLowerCase().includes(value));
+      const filter = allwords.filter(
+        (each) =>
+          each.title.toLowerCase().includes(value) ||
+          each.description.toLowerCase().includes(value)
+      );
+      displayallissues(filter);
+    });
+});
